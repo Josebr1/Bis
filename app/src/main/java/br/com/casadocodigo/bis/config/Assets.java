@@ -14,5 +14,8 @@ public class Assets {
     public static String SOUND = "sound.png";
     public static String METEOR = "meteor.png";
     public static String NAVA = "nave.png";
+    public static String LEFTCONTROL = "left.png";
+    public static String RIGHTCONTROL = "right.png";
+    public static String SHOOTBUTTON = "shootButton.png";
 
 }

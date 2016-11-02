@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.casadocodigo.bis.config.Assets;
+import br.com.casadocodigo.bis.game.control.GameButtons;
 import br.com.casadocodigo.bis.game.engines.MeteorsEngine;
 import br.com.casadocodigo.bis.game.interfaces.MeteorsEngineDelegate;
 import br.com.casadocodigo.bis.game.objects.Meteor;
@@ -50,10 +51,16 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate{
         );
         this.addChild(this.background);
 
+        /* Adicionar o delegate, fazendo o link entre as telas */
+        GameButtons gameButtonsLayer = GameButtons.getGameButtons();
+        gameButtonsLayer.setDelegate(this);
+        this.addChild(gameButtonsLayer);
+
         // Adicionando objeto (inimigos) na tela.
         this.meteorsLayer = CCLayer.node();
         this.addChild(this.meteorsLayer);
 
+        // Adicionando o player
         this.playerLayer = CCLayer.node();
         this.addChild(this.playerLayer);
 
