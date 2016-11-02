@@ -3,9 +3,12 @@ package br.com.casadocodigo.bis.game.control;
 import android.util.Log;
 
 import org.cocos2d.layers.CCLayer;
+import org.cocos2d.nodes.CCDirector;
+import org.cocos2d.transitions.CCFadeTransition;
 import org.cocos2d.types.CGPoint;
 
 import br.com.casadocodigo.bis.config.Assets;
+import br.com.casadocodigo.bis.game.scenes.GameScene;
 
 import static br.com.casadocodigo.bis.config.DeviceSettings.screenHeight;
 import static br.com.casadocodigo.bis.config.DeviceSettings.screenResolution;
@@ -76,6 +79,9 @@ public class MenuButtons extends CCLayer implements ButtonDelegate{
     public void buttonClicked(Button sender) {
         if(sender.equals(playButton)){
             Log.i("BIS", "Play");
+            CCDirector.sharedDirector().replaceScene(
+                    CCFadeTransition.transition(1.0f, GameScene.createGame())
+            );
         }
 
         if(sender.equals(highsCoredButton)){
