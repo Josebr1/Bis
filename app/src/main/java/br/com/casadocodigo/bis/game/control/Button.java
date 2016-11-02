@@ -9,6 +9,8 @@ import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGRect;
 
+import br.com.casadocodigo.bis.game.interfaces.ButtonDelegate;
+
 /**
  * Created by jose on 02/11/2016.
  */

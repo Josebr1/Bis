@@ -6,6 +6,7 @@ import org.cocos2d.layers.CCLayer;
 import org.cocos2d.types.CGPoint;
 
 import br.com.casadocodigo.bis.config.Assets;
+import br.com.casadocodigo.bis.game.interfaces.ButtonDelegate;
 import br.com.casadocodigo.bis.game.scenes.GameScene;
 
 import static br.com.casadocodigo.bis.config.DeviceSettings.screenResolution;

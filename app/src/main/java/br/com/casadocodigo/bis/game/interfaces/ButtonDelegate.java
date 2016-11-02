@@ -1,4 +1,6 @@
-package br.com.casadocodigo.bis.game.control;
+package br.com.casadocodigo.bis.game.interfaces;
+
+import br.com.casadocodigo.bis.game.control.Button;
 
 /**
  * Created by jose on 02/11/2016.

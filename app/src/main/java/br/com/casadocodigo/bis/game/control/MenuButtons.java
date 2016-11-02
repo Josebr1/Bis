@@ -8,6 +8,7 @@ import org.cocos2d.transitions.CCFadeTransition;
 import org.cocos2d.types.CGPoint;
 
 import br.com.casadocodigo.bis.config.Assets;
+import br.com.casadocodigo.bis.game.interfaces.ButtonDelegate;
 import br.com.casadocodigo.bis.game.scenes.GameScene;
 
 import static br.com.casadocodigo.bis.config.DeviceSettings.screenHeight;
@@ -18,7 +19,7 @@ import static br.com.casadocodigo.bis.config.DeviceSettings.screenWidth;
  * Created by jose on 02/11/2016.
  */
 
-public class MenuButtons extends CCLayer implements ButtonDelegate{
+public class MenuButtons extends CCLayer implements ButtonDelegate {
     private Button playButton;
     private Button highsCoredButton;
     private Button helpButton;
