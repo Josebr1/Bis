@@ -16,7 +16,7 @@ import static br.com.casadocodigo.bis.config.DeviceSettings.screenWidth;
 public class Player extends CCSprite {
 
     private float positionX = screenWidth() / 2;
-    private float positionY = 50;
+    private float positionY = 120;
 
     private ShootEngineDelegate delegate;
 
