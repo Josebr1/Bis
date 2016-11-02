@@ -13,5 +13,6 @@ public class Assets {
     public static String HELP = "help.png";
     public static String SOUND = "sound.png";
     public static String METEOR = "meteor.png";
+    public static String NAVA = "nave.png";
 
 }

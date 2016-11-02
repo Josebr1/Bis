@@ -11,6 +11,7 @@ import br.com.casadocodigo.bis.config.Assets;
 import br.com.casadocodigo.bis.game.engines.MeteorsEngine;
 import br.com.casadocodigo.bis.game.interfaces.MeteorsEngineDelegate;
 import br.com.casadocodigo.bis.game.objects.Meteor;
+import br.com.casadocodigo.bis.game.objects.Player;
 import br.com.casadocodigo.bis.screens.ScreenBackground;
 
 import static br.com.casadocodigo.bis.config.DeviceSettings.screenHeight;
@@ -37,6 +38,8 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate{
     private MeteorsEngine meteorsEngine;
     private CCLayer meteorsLayer;
     private List meteorsArray;
+    private CCLayer playerLayer;
+    private Player player;
 
     private GameScene(){
         this.background = new ScreenBackground(Assets.BACKGROUND);
@@ -50,6 +53,10 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate{
         // Adicionando objeto (inimigos) na tela.
         this.meteorsLayer = CCLayer.node();
         this.addChild(this.meteorsLayer);
+
+        this.playerLayer = CCLayer.node();
+        this.addChild(this.playerLayer);
+
         this.addGameObjects();
     }
 
@@ -78,6 +85,9 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate{
     private void addGameObjects(){
         this.meteorsArray = new ArrayList();
         this.meteorsEngine = new MeteorsEngine();
+
+        this.player = new Player();
+        this.playerLayer.addChild(this.player);
     }
 
     /**
