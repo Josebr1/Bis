@@ -5,6 +5,7 @@ import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.types.CGPoint;
 
+import br.com.casadocodigo.bis.config.Assets;
 import br.com.casadocodigo.bis.screens.ScreenBackground;
 
 /**
@@ -28,7 +29,7 @@ public class TitleScreen extends CCLayer {
     private ScreenBackground background;
 
     public TitleScreen(){
-        this.background = new ScreenBackground("background.png");
+        this.background = new ScreenBackground(Assets.BACKGROUND);
         this.background.setPosition(
                 CGPoint.ccp(
                         CCDirector.sharedDirector().winSize().width / 2.0f,
