@@ -8,6 +8,10 @@ import org.cocos2d.types.CGPoint;
 import br.com.casadocodigo.bis.config.Assets;
 import br.com.casadocodigo.bis.screens.ScreenBackground;
 
+import static br.com.casadocodigo.bis.config.DeviceSettings.screenHeight;
+import static br.com.casadocodigo.bis.config.DeviceSettings.screenResolution;
+import static br.com.casadocodigo.bis.config.DeviceSettings.screenWidth;
+
 /**
  * Created by jose on 02/11/2016.
  *
@@ -31,10 +35,10 @@ public class TitleScreen extends CCLayer {
     public TitleScreen(){
         this.background = new ScreenBackground(Assets.BACKGROUND);
         this.background.setPosition(
-                CGPoint.ccp(
-                        CCDirector.sharedDirector().winSize().width / 2.0f,
-                        CCDirector.sharedDirector().winSize().height / 2.0f
-                )
+                screenResolution(CGPoint.ccp(
+                        screenWidth() / 2.0f,
+                        screenHeight() / 2.0f
+                ))
         );
         this.addChild(this.background);
     }
