@@ -17,5 +17,6 @@ public class Assets {
     public static String LEFTCONTROL = "left.png";
     public static String RIGHTCONTROL = "right.png";
     public static String SHOOTBUTTON = "shootButton.png";
+    public static String SHOOT = "shoot.png";
 
 }

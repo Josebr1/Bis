@@ -65,8 +65,10 @@ public class GameButtons extends CCLayer implements ButtonDelegate {
             Log.i("Button", "rightControl");
         }
 
+        /* Detecta o toque no botão de tiro e chama o disparo */
         if(sender.equals(this.shootButton)){
             Log.i("Button", "shootButton");
+            this.delegate.shoot();
         }
     }
 

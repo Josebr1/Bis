@@ -11,8 +11,10 @@ import br.com.casadocodigo.bis.config.Assets;
 import br.com.casadocodigo.bis.game.control.GameButtons;
 import br.com.casadocodigo.bis.game.engines.MeteorsEngine;
 import br.com.casadocodigo.bis.game.interfaces.MeteorsEngineDelegate;
+import br.com.casadocodigo.bis.game.interfaces.ShootEngineDelegate;
 import br.com.casadocodigo.bis.game.objects.Meteor;
 import br.com.casadocodigo.bis.game.objects.Player;
+import br.com.casadocodigo.bis.game.objects.Shoot;
 import br.com.casadocodigo.bis.screens.ScreenBackground;
 
 import static br.com.casadocodigo.bis.config.DeviceSettings.screenHeight;
@@ -34,13 +36,15 @@ import static br.com.casadocodigo.bis.config.DeviceSettings.screenWidth;
  * .Checar colisões entre objetos
  */
 
-public class GameScene extends CCLayer implements MeteorsEngineDelegate{
+public class GameScene extends CCLayer implements MeteorsEngineDelegate, ShootEngineDelegate{
     private ScreenBackground background;
     private MeteorsEngine meteorsEngine;
     private CCLayer meteorsLayer;
     private List meteorsArray;
     private CCLayer playerLayer;
     private Player player;
+    private CCLayer shootsLayer;
+    private ArrayList shootsArray;
 
     private GameScene(){
         this.background = new ScreenBackground(Assets.BACKGROUND);
@@ -63,6 +67,12 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate{
         // Adicionando o player
         this.playerLayer = CCLayer.node();
         this.addChild(this.playerLayer);
+
+        // Shoot - Criando as camadas
+        this.shootsLayer = CCLayer.node();
+        this.addChild(this.shootsLayer);
+
+        this.setIsTouchEnabled(true);
 
         this.addGameObjects();
     }
@@ -95,6 +105,12 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate{
 
         this.player = new Player();
         this.playerLayer.addChild(this.player);
+
+        //* Array que adiciona os tiros
+        // Nesse momento e ideal para o fechamento do link do delegate entre
+        // tiro e tela de jogo.*/
+        this.shootsArray = new ArrayList();
+        this.player.setDelegate(this);
     }
 
     /**
@@ -116,5 +132,32 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate{
     private void startEngines(){
         this.addChild(this.meteorsEngine);
         this.meteorsEngine.setDelegate(this);
+    }
+
+    /**
+     * Nesse momento, implementaremos a interface ShootEngineDelegate na GameScene.
+     * Dessa forma, a tela de jogo saberá o que fazer quando for requisitada para atira.
+     * A interface obriga a criação do método createShoot(). Nese, um novo tiro, que
+     * é recebido como parâmetro, é adicionado à camada e ao array de tiros. Alèm
+     * disso, chama o método start() da classe Shoot, permitindo que ela controle o
+     * que for necessário lá dentro.
+     * @param shoot
+     */
+    @Override
+    public void createShoot(Shoot shoot) {
+        this.shootsLayer.addChild(shoot);
+        shoot.setDelegate(this);
+        shoot.start();
+        this.shootsArray.add(shoot);
+    }
+
+    /**
+     * Shoot() que chama o player. Precisamos disso por um fato muito importante
+     * que é o posicionamento inicial do tiro.O tiro deve sair da nave.
+     * @return
+     */
+    public boolean shoot(){
+        player.shoot();
+        return true;
     }
 }
