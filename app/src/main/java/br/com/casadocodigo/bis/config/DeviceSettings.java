@@ -6,6 +6,10 @@ import org.cocos2d.types.CGSize;
 
 /**
  * Created by jose on 02/11/2016.
+ *
+ * -- Reponsável por acessar o CCDirector e retornar as medidas
+ * e configurações do device.
+ *
  */
 
 public class DeviceSettings {
