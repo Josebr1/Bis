@@ -59,10 +59,12 @@ public class GameButtons extends CCLayer implements ButtonDelegate {
     public void buttonClicked(Button sender) {
         if(sender.equals(this.leftControl)){
             Log.i("Button", "leftControl");
+            this.delegate.moveLeft();
         }
 
         if(sender.equals(this.rightControl)){
             Log.i("Button", "rightControl");
+            this.delegate.moveRight();
         }
 
         /* Detecta o toque no botão de tiro e chama o disparo */

@@ -160,4 +160,12 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate, ShootEn
         player.shoot();
         return true;
     }
+
+    public void moveLeft(){
+        player.moveLeft();
+    }
+
+    public void moveRight(){
+        player.moveRight();
+    }
 }

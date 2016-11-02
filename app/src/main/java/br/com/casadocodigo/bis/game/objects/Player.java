@@ -37,4 +37,18 @@ public class Player extends CCSprite {
         this.delegate = delegate;
     }
 
+    public void moveLeft(){
+        if(positionX > 30){
+            positionX -= 10;
+        }
+        setPosition(positionX, positionY);
+    }
+
+    public void moveRight(){
+        if(positionX < screenWidth() - 30){
+            positionX += 10;
+        }
+        setPosition(positionX, positionY);
+    }
+
 }
