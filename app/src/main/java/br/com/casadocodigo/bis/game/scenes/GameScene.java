@@ -302,4 +302,9 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate, ShootEn
         ((Meteor) meteor).shooted();
         ((Shoot) shoot).explode();
     }
+
+    public void playerHit(CCSprite meteor, CCSprite player){
+        ((Meteor) meteor).shooted();
+        ((Player) player).explode();
+    }
 }

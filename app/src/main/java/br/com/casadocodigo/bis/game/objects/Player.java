@@ -1,5 +1,10 @@
 package br.com.casadocodigo.bis.game.objects;
 
+import org.cocos2d.actions.instant.CCCallFunc;
+import org.cocos2d.actions.interval.CCFadeOut;
+import org.cocos2d.actions.interval.CCScaleBy;
+import org.cocos2d.actions.interval.CCSequence;
+import org.cocos2d.actions.interval.CCSpawn;
 import org.cocos2d.nodes.CCSprite;
 
 import br.com.casadocodigo.bis.config.Assets;
@@ -49,6 +54,22 @@ public class Player extends CCSprite {
             positionX += 10;
         }
         setPosition(positionX, positionY);
+    }
+
+    public void explode(){
+        // Para o agendamento
+        this.unschedule("update");
+
+        // Cria efeitos
+        // Cria efeitos
+        float dt = 0.2f;
+        CCScaleBy a1 = CCScaleBy.action(dt, 0.5f);
+        CCFadeOut a2 = CCFadeOut.action(dt);
+        CCSpawn s1 = CCSpawn.actions(a1, a2);
+
+
+        // Roda efeito
+        this.runAction(CCSequence.actions(s1));
     }
 
 }
