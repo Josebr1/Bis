@@ -2,10 +2,11 @@ package br.com.casadocodigo.bis.game.scenes;
 
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
-import org.cocos2d.nodes.CCDirector;
+import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
 
 import br.com.casadocodigo.bis.config.Assets;
+import br.com.casadocodigo.bis.game.control.MenuButtons;
 import br.com.casadocodigo.bis.screens.ScreenBackground;
 
 import static br.com.casadocodigo.bis.config.DeviceSettings.screenHeight;
@@ -33,6 +34,7 @@ public class TitleScreen extends CCLayer {
     private ScreenBackground background;
 
     public TitleScreen(){
+        // Background
         this.background = new ScreenBackground(Assets.BACKGROUND);
         this.background.setPosition(
                 screenResolution(CGPoint.ccp(
@@ -41,6 +43,17 @@ public class TitleScreen extends CCLayer {
                 ))
         );
         this.addChild(this.background);
+
+        // Define o Logo
+        CCSprite title = CCSprite.sprite(Assets.LOGO);
+        title.setPosition(screenResolution(
+                CGPoint.ccp(screenWidth() / 2, screenHeight() - 130)
+        ));
+        this.addChild(title);
+
+        // Botões
+        MenuButtons menuLayer = new MenuButtons();
+        this.addChild(menuLayer);
     }
 
     /**
