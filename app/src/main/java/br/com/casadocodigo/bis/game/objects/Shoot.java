@@ -2,6 +2,11 @@ package br.com.casadocodigo.bis.game.objects;
 
 import android.util.Log;
 
+import org.cocos2d.actions.instant.CCCallFunc;
+import org.cocos2d.actions.interval.CCFadeOut;
+import org.cocos2d.actions.interval.CCScaleBy;
+import org.cocos2d.actions.interval.CCSequence;
+import org.cocos2d.actions.interval.CCSpawn;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
 
@@ -52,5 +57,29 @@ public class Shoot extends CCSprite {
      */
     public void start(){
         Log.i("Start", "Shot moving!");
+    }
+
+    public void explode(){
+        // Remove do array
+        this.delegate.removeShoot(this);
+
+        // Para o agendamento
+        this.unschedule("update");
+
+        // Cria efeitos
+        float dt = 0.2f;
+        CCScaleBy a1 = CCScaleBy.action(dt, 0.5f);
+        CCFadeOut a2 = CCFadeOut.action(dt);
+        CCSpawn s1 = CCSpawn.actions(a1, a2);
+
+        // Função a ser executada após efeito
+        CCCallFunc func = CCCallFunc.action(this, "removeMe");
+
+        // Roda efeito
+        this.runAction(CCSequence.actions(s1, func));
+    }
+
+    public void removeMe(){
+        this.removeFromParentAndCleanup(true);
     }
 }

@@ -13,4 +13,6 @@ import br.com.casadocodigo.bis.game.objects.Shoot;
 
 public interface ShootEngineDelegate {
     void createShoot(Shoot shoot);
+
+    void removeShoot(Shoot shoot);
 }

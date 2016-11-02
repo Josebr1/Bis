@@ -15,4 +15,10 @@ public interface MeteorsEngineDelegate {
      * @param meteor
      */
     void createMeteor(Meteor meteor);
+
+    /**
+     * Para que ela receba a notificação de quando um meteoro colidiu
+     * @param meteor
+     */
+    void removeMeteor(Meteor meteor);
 }

@@ -8,6 +8,8 @@ import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGRect;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,11 +96,22 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate, ShootEn
 
     }
 
+    /**
+     * Toda vez que criamos um novo Meteor, queremos que ele avise a própria
+     * GameScene de que ele foi removido. Em outras palavras, a GameScene será
+     * o delegate do Meteor.
+     */
     @Override
     public void createMeteor(Meteor meteor) {
+        meteor.setDelegate(this);
         this.meteorsLayer.addChild(meteor);
         meteor.start();
         meteorsArray.add(meteor);
+    }
+
+    @Override
+    public void removeMeteor(Meteor meteor) {
+        this.meteorsArray.remove(meteor);
     }
 
     /**
@@ -162,6 +175,11 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate, ShootEn
         this.shootsArray.add(shoot);
     }
 
+    @Override
+    public void removeShoot(Shoot shoot) {
+        this.shootsArray.remove(shoot);
+    }
+
     /**
      * Shoot() que chama o player. Precisamos disso por um fato muito importante
      * que é o posicionamento inicial do tiro.O tiro deve sair da nave.
@@ -219,6 +237,9 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate, ShootEn
      * O que teremos então é uma verificação de cada elemento do primeiro array, com
      * cada elemento do segundo array. Caso a detecção, faremos um tratamento.
      *
+     * E importante perceber que a decisão de qual método rodar após detectar
+     * a colisão é em tempo de execução, e preciso invocar o reflection.
+     *
      * @param array1
      * @param array2
      * @param gameScene
@@ -240,6 +261,21 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate, ShootEn
                 if (CGRect.intersects(rect1, rect2)) {
                     Log.i("Colisao", "OK");
                     result = true;
+
+                    Method method;
+
+                    try{
+                        method = GameScene.class.getMethod(hit, CCSprite.class, CCSprite.class);
+
+                        method.invoke(gameScene, array1.get(i), array2.get(j));
+
+                    } catch (NoSuchMethodException e) {
+                        e.printStackTrace();
+                    } catch (InvocationTargetException e) {
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
@@ -255,5 +291,15 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate, ShootEn
         this.checkRadiusHitsOfArray(this.meteorsArray, this.shootsArray, this, "meteoroHit");
 
         this.checkRadiusHitsOfArray(this.meteorsArray, this.playersArray, this, "playerHit");
+    }
+
+    /**
+     * Adicione o meteoroHit()
+     * @param meteor
+     * @param shoot
+     */
+    public void meteoroHit(CCSprite meteor, CCSprite shoot){
+        ((Meteor) meteor).shooted();
+        ((Shoot) shoot).explode();
     }
 }
