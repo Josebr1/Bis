@@ -20,6 +20,7 @@ import br.com.casadocodigo.bis.game.interfaces.MeteorsEngineDelegate;
 import br.com.casadocodigo.bis.game.interfaces.ShootEngineDelegate;
 import br.com.casadocodigo.bis.game.objects.Meteor;
 import br.com.casadocodigo.bis.game.objects.Player;
+import br.com.casadocodigo.bis.game.objects.Score;
 import br.com.casadocodigo.bis.game.objects.Shoot;
 import br.com.casadocodigo.bis.screens.ScreenBackground;
 
@@ -52,6 +53,8 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate, ShootEn
     private CCLayer shootsLayer;
     private List shootsArray;
     private List playersArray;
+    private CCLayer scoreLayer;
+    private Score score;
 
     private GameScene() {
         this.background = new ScreenBackground(Assets.BACKGROUND);
@@ -78,6 +81,10 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate, ShootEn
         // Shoot - Criando as camadas
         this.shootsLayer = CCLayer.node();
         this.addChild(this.shootsLayer);
+
+        // Score
+        this.scoreLayer = CCLayer.node();
+        this.addChild(this.scoreLayer);
 
         this.setIsTouchEnabled(true);
 
@@ -126,6 +133,10 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate, ShootEn
 
         this.playersArray = new ArrayList();
         this.playersArray.add(this.player);
+
+        // Score
+        this.score = new Score();
+        this.scoreLayer.addChild(this.score);
 
         //* Array que adiciona os tiros
         // Nesse momento e ideal para o fechamento do link do delegate entre
@@ -301,6 +312,7 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate, ShootEn
     public void meteoroHit(CCSprite meteor, CCSprite shoot){
         ((Meteor) meteor).shooted();
         ((Shoot) shoot).explode();
+        this.score.increase();
     }
 
     public void playerHit(CCSprite meteor, CCSprite player){
