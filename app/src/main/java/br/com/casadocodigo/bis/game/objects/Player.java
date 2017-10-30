@@ -5,8 +5,11 @@ import org.cocos2d.actions.interval.CCFadeOut;
 import org.cocos2d.actions.interval.CCScaleBy;
 import org.cocos2d.actions.interval.CCSequence;
 import org.cocos2d.actions.interval.CCSpawn;
+import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.sound.SoundEngine;
 
+import br.com.casadocodigo.bis.R;
 import br.com.casadocodigo.bis.config.Assets;
 import br.com.casadocodigo.bis.game.interfaces.ShootEngineDelegate;
 
@@ -57,6 +60,9 @@ public class Player extends CCSprite {
     }
 
     public void explode(){
+        // Adiciona o efeito de som: batida
+        SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.over);
+
         // Para o agendamento
         this.unschedule("update");
 

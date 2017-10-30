@@ -7,9 +7,12 @@ import org.cocos2d.actions.interval.CCFadeOut;
 import org.cocos2d.actions.interval.CCScaleBy;
 import org.cocos2d.actions.interval.CCSequence;
 import org.cocos2d.actions.interval.CCSpawn;
+import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.sound.SoundEngine;
 import org.cocos2d.types.CGPoint;
 
+import br.com.casadocodigo.bis.R;
 import br.com.casadocodigo.bis.config.Assets;
 import br.com.casadocodigo.bis.game.interfaces.ShootEngineDelegate;
 
@@ -57,6 +60,8 @@ public class Shoot extends CCSprite {
      */
     public void start(){
         Log.i("Start", "Shot moving!");
+        // Adiciona o efeito de som de tiro
+        SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.shoot);
     }
 
     public void explode(){

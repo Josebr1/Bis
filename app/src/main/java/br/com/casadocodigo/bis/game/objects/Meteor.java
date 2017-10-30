@@ -5,11 +5,14 @@ import org.cocos2d.actions.interval.CCFadeOut;
 import org.cocos2d.actions.interval.CCScaleBy;
 import org.cocos2d.actions.interval.CCSequence;
 import org.cocos2d.actions.interval.CCSpawn;
+import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.sound.SoundEngine;
 import org.cocos2d.types.CGPoint;
 
 import java.util.Random;
 
+import br.com.casadocodigo.bis.R;
 import br.com.casadocodigo.bis.game.interfaces.MeteorsEngineDelegate;
 
 import static br.com.casadocodigo.bis.config.DeviceSettings.screenHeight;
@@ -72,6 +75,9 @@ public class Meteor extends CCSprite {
      * do meteoro.
      */
     public void shooted(){
+        // Adiciona o efeito de som de batida
+        SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.bang);
+
         this.delegate.removeMeteor(this);
 
         // Para de fica chamando o update
