@@ -4,7 +4,9 @@ import android.util.Log;
 
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
+import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.sound.SoundEngine;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGRect;
 
@@ -13,6 +15,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.casadocodigo.bis.R;
 import br.com.casadocodigo.bis.config.Assets;
 import br.com.casadocodigo.bis.game.control.GameButtons;
 import br.com.casadocodigo.bis.game.engines.MeteorsEngine;
@@ -89,6 +92,9 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate, ShootEn
         this.setIsTouchEnabled(true);
 
         this.addGameObjects();
+
+        // Cache som
+        this.preloadCache();
     }
 
     public static CCScene createGame() {
@@ -318,5 +324,23 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate, ShootEn
     public void playerHit(CCSprite meteor, CCSprite player){
         ((Meteor) meteor).shooted();
         ((Player) player).explode();
+    }
+
+    /**
+     * Para colocar um som no cache devemos iniciá-lo já no início do game. Criaremos
+     então um método com essa responsabilidade na classe GameScene chamado
+     preloadCache. Esse método fará o cache dos 3 sons que estamos utilizando até
+     aqui.
+     */
+    private void preloadCache(){
+        SoundEngine.sharedEngine().preloadEffect(
+                CCDirector.sharedDirector().getActivity(),
+                R.raw.shoot);
+        SoundEngine.sharedEngine().preloadEffect(
+                CCDirector.sharedDirector().getActivity(),
+                R.raw.bang);
+        SoundEngine.sharedEngine().preloadEffect(
+                CCDirector.sharedDirector().getActivity(),
+                R.raw.over);
     }
 }
