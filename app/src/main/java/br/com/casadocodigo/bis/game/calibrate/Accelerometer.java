@@ -18,11 +18,30 @@ public class Accelerometer implements SensorEventListener {
     static Accelerometer sharedAccelerometer = null;
     private AccelerometerDelegate delegate;
     private SensorManager sensorManager;
+    private float calibratedAccelerationX;
+    private float calibratedAccelerationY;
+    private int calibrated;
 
     @Override
     public void onSensorChanged(SensorEvent acceleration) {
-        this.currentAccelerationX = acceleration.values[0];
-        this.currentAccelerationY = acceleration.values[1];
+
+        if(calibrated < 100){
+            this.calibratedAccelerationX += acceleration.values[0];
+            this.calibratedAccelerationY += acceleration.values[1];
+
+            calibrated++;
+
+            if(calibrated == 100){
+                this.calibratedAccelerationX /= 100;
+                this.calibratedAccelerationY /= 100;
+            }
+
+            return;
+        }
+
+        // Leitura da aceleracao
+        this.currentAccelerationX = acceleration.values[0] - this.calibratedAccelerationX;
+        this.currentAccelerationY = acceleration.values[1] - this.calibratedAccelerationY;
 
         // Envia leitura do acelerometro
         if (this.delegate != null) {
