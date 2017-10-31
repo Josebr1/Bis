@@ -93,6 +93,10 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate, ShootEn
 
         this.addGameObjects();
 
+        // sons
+        SoundEngine.sharedEngine().playSound(
+                CCDirector.sharedDirector().getActivity(), R.raw.music, true);
+
         // Cache som
         this.preloadCache();
     }
