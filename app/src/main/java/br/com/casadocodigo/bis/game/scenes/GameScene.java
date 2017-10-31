@@ -140,6 +140,8 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate, ShootEn
 
         this.player = new Player();
         this.playerLayer.addChild(this.player);
+        // Captura o acelerometro
+        this.player.catchAccelerometer();
 
         this.playersArray = new ArrayList();
         this.playersArray.add(this.player);

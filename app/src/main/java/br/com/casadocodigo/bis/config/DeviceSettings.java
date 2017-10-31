@@ -1,5 +1,7 @@
 package br.com.casadocodigo.bis.config;
 
+import android.hardware.SensorManager;
+
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
@@ -13,6 +15,8 @@ import org.cocos2d.types.CGSize;
  */
 
 public class DeviceSettings {
+
+    private static SensorManager sensormanager;
 
     public static CGPoint screenResolution(CGPoint gcPoint) {
         return gcPoint;
@@ -30,4 +34,11 @@ public class DeviceSettings {
         return CCDirector.sharedDirector().winSize();
     }
 
+    public static SensorManager getSensormanager() {
+        return sensormanager;
+    }
+
+    public static void setSensorManager(SensorManager sensormanager) {
+        DeviceSettings.sensormanager = sensormanager;
+    }
 }
