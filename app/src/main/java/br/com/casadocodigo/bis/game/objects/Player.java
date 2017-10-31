@@ -40,7 +40,7 @@ public class Player extends CCSprite implements AccelerometerDelegate {
     private static final double NOISE = 1;
 
     public Player() {
-        super(Assets.NAVA);
+        super(Assets.NAVE);
         setPosition(positionX, positionY);
         this.schedule("update");
     }
@@ -114,8 +114,8 @@ public class Player extends CCSprite implements AccelerometerDelegate {
 
     @Override
     public void accelerometerDidAccelerate(float x, float y) {
-        Log.i("X", "" + x);
-        Log.i("Y", "" + y);
+        //Log.i("X", "" + x);
+        //Log.i("Y", "" + y);
         this.currentAccelX = x;
         this.currentAccelY = y;
     }

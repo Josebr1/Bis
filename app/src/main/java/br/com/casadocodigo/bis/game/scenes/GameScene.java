@@ -101,34 +101,22 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate, ShootEn
         this.preloadCache();
     }
 
-    public static CCScene createGame() {
-        CCScene scene = CCScene.node();
-        GameScene layer = new GameScene();
-        scene.addChild(layer);
-        return scene;
-    }
-
-    @Override
-    public void createMeteor(Meteor meteor, float x, float y, float vel, double ang, int vl) {
-
-    }
-
     /**
-     * Toda vez que criamos um novo Meteor, queremos que ele avise a própria
-     * GameScene de que ele foi removido. Em outras palavras, a GameScene será
-     * o delegate do Meteor.
+     * Para colocar um som no cache devemos iniciá-lo já no início do game. Criaremos
+     então um método com essa responsabilidade na classe GameScene chamado
+     preloadCache. Esse método fará o cache dos 3 sons que estamos utilizando até
+     aqui.
      */
-    @Override
-    public void createMeteor(Meteor meteor) {
-        meteor.setDelegate(this);
-        this.meteorsLayer.addChild(meteor);
-        meteor.start();
-        meteorsArray.add(meteor);
-    }
-
-    @Override
-    public void removeMeteor(Meteor meteor) {
-        this.meteorsArray.remove(meteor);
+    private void preloadCache(){
+        SoundEngine.sharedEngine().preloadEffect(
+                CCDirector.sharedDirector().getActivity(),
+                R.raw.shoot);
+        SoundEngine.sharedEngine().preloadEffect(
+                CCDirector.sharedDirector().getActivity(),
+                R.raw.bang);
+        SoundEngine.sharedEngine().preloadEffect(
+                CCDirector.sharedDirector().getActivity(),
+                R.raw.over);
     }
 
     /**
@@ -171,78 +159,13 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate, ShootEn
     }
 
     /**
-     * Por enquanto simplesmente adicionaremos o memeteorsEngine
-     * e setamos o delegate como this, para sermos avisados dos
-     * novos meteoros:
+     * Método chamado em tempo de execução, para detectar colisões.
+     * @param dt
      */
-    private void startEngines() {
-        this.addChild(this.meteorsEngine);
-        this.meteorsEngine.setDelegate(this);
-    }
+    public void checkHits(float dt) {
+        this.checkRadiusHitsOfArray(this.meteorsArray, this.shootsArray, this, "meteoroHit");
 
-    /**
-     * Nesse momento, implementaremos a interface ShootEngineDelegate na GameScene.
-     * Dessa forma, a tela de jogo saberá o que fazer quando for requisitada para atira.
-     * A interface obriga a criação do método createShoot(). Nese, um novo tiro, que
-     * é recebido como parâmetro, é adicionado à camada e ao array de tiros. Alèm
-     * disso, chama o método start() da classe Shoot, permitindo que ela controle o
-     * que for necessário lá dentro.
-     *
-     * @param shoot
-     */
-    @Override
-    public void createShoot(Shoot shoot) {
-        this.shootsLayer.addChild(shoot);
-        shoot.setDelegate(this);
-        shoot.start();
-        this.shootsArray.add(shoot);
-    }
-
-    @Override
-    public void removeShoot(Shoot shoot) {
-        this.shootsArray.remove(shoot);
-    }
-
-    /**
-     * Shoot() que chama o player. Precisamos disso por um fato muito importante
-     * que é o posicionamento inicial do tiro.O tiro deve sair da nave.
-     *
-     * @return
-     */
-    public boolean shoot() {
-        player.shoot();
-        return true;
-    }
-
-    public void moveLeft() {
-        player.moveLeft();
-    }
-
-    public void moveRight() {
-        player.moveRight();
-    }
-
-    /**
-     * Método que receberá um Sprite e devolverá um retângulo
-     * que conterá as bordas do elemento. Para isso, utilizaremos
-     * um método que existe nos próprio Sprites chamado getBoundingBox().
-     * Esse método devolve um tipo CGRect, também do Cocos2D, que representa
-     * os contornos da figura mapeados em forma de retangulo.
-     *
-     * Para trabalhar com essas informações, precisamos tambem saber a posição
-     * do elemento na tela, e então utilizaremos outro tipo chamado CGPoint.
-     * Com esse método, teremos todas as coordenadas do posicionamento do objeto
-     * a ser analisado.
-     *
-     * @param object
-     * @return
-     */
-    public CGRect getBorders(CCSprite object) {
-        CGRect rect = object.getBoundingBox();
-        CGPoint cgPoint = rect.origin;
-        CGRect glRect = CGRect.make(cgPoint.x, cgPoint.y, rect.size.width, rect.size.height);
-
-        return glRect;
+        this.checkRadiusHitsOfArray(this.meteorsArray, this.playersArray, this, "playerHit");
     }
 
     /**
@@ -269,51 +192,136 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate, ShootEn
      * @param hit
      * @return
      */
-    private boolean checkRadiusHitsOfArray(List<? extends CCSprite> array1, List<? extends CCSprite> array2, GameScene gameScene, String hit) {
+    private boolean checkRadiusHitsOfArray(List<? extends CCSprite> array1,
+                                           List<? extends CCSprite> array2,
+                                           GameScene gameScene,
+                                           String hit) {
         boolean result = false;
-
         for (int i = 0; i < array1.size(); i++) {
             // Pega objeto do primeiro array
-            CGRect rect1 = getBorders(array1.get(i));
-
+            CGRect rect1 = getBoarders(array1.get(i));
             for (int j = 0; j < array2.size(); j++) {
                 // Pega objeto do segundo array
-                CGRect rect2 = getBorders(array2.get(j));
-
+                CGRect rect2 = getBoarders(array2.get(j));
                 // Verifica colisão
                 if (CGRect.intersects(rect1, rect2)) {
-                    Log.i("Colisao", "OK");
+                    System.out.println("Colision Detected: " + hit);
                     result = true;
 
                     Method method;
-
-                    try{
+                    try {
                         method = GameScene.class.getMethod(hit, CCSprite.class, CCSprite.class);
-
                         method.invoke(gameScene, array1.get(i), array2.get(j));
-
-                    } catch (NoSuchMethodException e) {
-                        e.printStackTrace();
-                    } catch (InvocationTargetException e) {
+                    } catch (SecurityException e1) {
+                        e1.printStackTrace();
+                    } catch (NoSuchMethodException e1) {
+                        e1.printStackTrace();
+                    } catch (IllegalArgumentException e) {
                         e.printStackTrace();
                     } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (InvocationTargetException e) {
                         e.printStackTrace();
                     }
                 }
             }
         }
-
         return result;
     }
 
     /**
-     * Método chamado em tempo de execução, para detectar colisões.
-     * @param dt
+     * Método que receberá um Sprite e devolverá um retângulo
+     * que conterá as bordas do elemento. Para isso, utilizaremos
+     * um método que existe nos próprio Sprites chamado getBoundingBox().
+     * Esse método devolve um tipo CGRect, também do Cocos2D, que representa
+     * os contornos da figura mapeados em forma de retangulo.
+     *
+     * Para trabalhar com essas informações, precisamos tambem saber a posição
+     * do elemento na tela, e então utilizaremos outro tipo chamado CGPoint.
+     * Com esse método, teremos todas as coordenadas do posicionamento do objeto
+     * a ser analisado.
+     *
+     * @param object
+     * @return
      */
-    public void checkHits(float dt) {
-        this.checkRadiusHitsOfArray(this.meteorsArray, this.shootsArray, this, "meteoroHit");
+    public CGRect getBoarders(CCSprite object) {
+        CGRect rect = object.getBoundingBox();
+        //  Log.e("JOGO", "rect x: " + rect.origin.x);
+        // Log.e("JOGO", "rect y: " + rect.origin.y);
+        //  Log.e("JOGO", "rect width: " + rect.size.width);
+        //   Log.e("JOGO", "rect height: " + rect.size.height);
+        //CGPoint GLpoint = rect.origin;
+        //CGRect GLrect = CGRect.make(GLpoint.x, GLpoint.y, rect.size.width, rect.size.height);
+        // Log.e("JOGO", "GLrect x: " + GLrect.origin.x);
+        // Log.e("JOGO", "GLrect y: " + GLrect.origin.y);
+        // Log.e("JOGO", "GLrect width: " + GLrect.size.width);
+        // Log.e("JOGO", "GLrect height: " + GLrect.size.height);
+        return rect;
+    }
 
-        this.checkRadiusHitsOfArray(this.meteorsArray, this.playersArray, this, "playerHit");
+    /**
+     * Por enquanto simplesmente adicionaremos o memeteorsEngine
+     * e setamos o delegate como this, para sermos avisados dos
+     * novos meteoros:
+     */
+    private void startEngines() {
+        this.addChild(this.meteorsEngine);
+        this.meteorsEngine.setDelegate(this);
+    }
+
+    @Override
+    public void createMeteor(Meteor meteor, float x, float y, float vel, double ang, int vl) {
+
+    }
+
+    /**
+     * Toda vez que criamos um novo Meteor, queremos que ele avise a própria
+     * GameScene de que ele foi removido. Em outras palavras, a GameScene será
+     * o delegate do Meteor.
+     */
+    @Override
+    public void createMeteor(Meteor meteor) {
+        meteor.setDelegate(this);
+        this.meteorsLayer.addChild(meteor);
+        meteor.start();
+        meteorsArray.add(meteor);
+    }
+
+    /**
+     * Shoot() que chama o player. Precisamos disso por um fato muito importante
+     * que é o posicionamento inicial do tiro.O tiro deve sair da nave.
+     *
+     * @return
+     */
+    public boolean shoot() {
+        player.shoot();
+        return true;
+    }
+
+    /**
+     * Nesse momento, implementaremos a interface ShootEngineDelegate na GameScene.
+     * Dessa forma, a tela de jogo saberá o que fazer quando for requisitada para atira.
+     * A interface obriga a criação do método createShoot(). Nese, um novo tiro, que
+     * é recebido como parâmetro, é adicionado à camada e ao array de tiros. Alèm
+     * disso, chama o método start() da classe Shoot, permitindo que ela controle o
+     * que for necessário lá dentro.
+     *
+     * @param shoot
+     */
+    @Override
+    public void createShoot(Shoot shoot) {
+        this.shootsLayer.addChild(shoot);
+        shoot.setDelegate(this);
+        shoot.start();
+        this.shootsArray.add(shoot);
+    }
+
+    public void moveLeft() {
+        player.moveLeft();
+    }
+
+    public void moveRight() {
+        player.moveRight();
     }
 
     /**
@@ -327,26 +335,37 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate, ShootEn
         this.score.increase();
     }
 
+    @Override
+    public void removeMeteor(Meteor meteor) {
+        this.meteorsArray.remove(meteor);
+    }
+
+    @Override
+    public void removeShoot(Shoot shoot) {
+        this.shootsArray.remove(shoot);
+    }
+
     public void playerHit(CCSprite meteor, CCSprite player){
         ((Meteor) meteor).shooted();
         ((Player) player).explode();
+        CCDirector.sharedDirector()
+                .replaceScene(new GameOverScreen().scene());
+    }
+
+    public static CCScene createGame() {
+        CCScene scene = CCScene.node();
+        GameScene layer = new GameScene();
+        scene.addChild(layer);
+        return scene;
     }
 
     /**
-     * Para colocar um som no cache devemos iniciá-lo já no início do game. Criaremos
-     então um método com essa responsabilidade na classe GameScene chamado
-     preloadCache. Esse método fará o cache dos 3 sons que estamos utilizando até
-     aqui.
+     * Para que essa classe possa ser vista no jogo, a classe GameScene deve estar ciente
+     e inicializá-la. Para isso, teremos o método startFinalScreen que faz a transição
+     para a tela final.v
      */
-    private void preloadCache(){
-        SoundEngine.sharedEngine().preloadEffect(
-                CCDirector.sharedDirector().getActivity(),
-                R.raw.shoot);
-        SoundEngine.sharedEngine().preloadEffect(
-                CCDirector.sharedDirector().getActivity(),
-                R.raw.bang);
-        SoundEngine.sharedEngine().preloadEffect(
-                CCDirector.sharedDirector().getActivity(),
-                R.raw.over);
+    public void startFinalScreen() {
+        CCDirector.sharedDirector().replaceScene(new FinalScreen().scene());
+        Log.i("FinalScreen", "OK");
     }
 }
