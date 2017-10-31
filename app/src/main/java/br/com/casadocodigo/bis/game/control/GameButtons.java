@@ -9,6 +9,7 @@ import br.com.casadocodigo.bis.config.Assets;
 import br.com.casadocodigo.bis.game.interfaces.ButtonDelegate;
 import br.com.casadocodigo.bis.game.scenes.GameScene;
 
+import static br.com.casadocodigo.bis.config.DeviceSettings.screenHeight;
 import static br.com.casadocodigo.bis.config.DeviceSettings.screenResolution;
 import static br.com.casadocodigo.bis.config.DeviceSettings.screenWidth;
 
@@ -25,53 +26,71 @@ public class GameButtons extends CCLayer implements ButtonDelegate {
     private Button leftControl;
     private Button rightControl;
     private Button shootButton;
+    private Button pauseButton;
 
     private GameScene delegate;
 
-    public static GameButtons getGameButtons(){
+    public static GameButtons gameButtons() {
         return new GameButtons();
     }
 
-    public GameButtons(){
-        // Habilita o toque na tela
+    public GameButtons() {
+
+        // Enable Touch
         this.setIsTouchEnabled(true);
 
-        // Cria os botões
-        this.leftControl = new Button(Assets.LEFTCONTROL);
-        this.rightControl = new Button(Assets.RIGHTCONTROL);
-        this.shootButton = new Button(Assets.SHOOTBUTTON);
+        // Create Buttons
+        this.leftControl 	= new Button(Assets.LEFTCONTROL);
+        this.rightControl 	= new Button(Assets.RIGHTCONTROL);
+        this.shootButton 	= new Button(Assets.SHOOTBUTTON);
+        this.pauseButton 	= new Button(Assets.PAUSE);
 
-        // Configura as delegações
+        // Set Buttons Delegates
         this.leftControl.setDelegate(this);
         this.rightControl.setDelegate(this);
         this.shootButton.setDelegate(this);
+        this.pauseButton.setDelegate(this);
 
-        // Configura posições
-        setButtonsPosition();
+        // set position
+        setButtonspPosition();
 
-        // Adiciona os botões na tela
-        //addChild(leftControl);
-        //addChild(rightControl);
+        // Add Buttons to Screen
+//		addChild(leftControl);
+//		addChild(rightControl);
         addChild(shootButton);
+        addChild(pauseButton);
+
+    }
+
+    private void setButtonspPosition() {
+
+        // Buttons Positions
+        leftControl.setPosition(screenResolution(CGPoint.ccp( 40  , 40 ))) ;
+        rightControl.setPosition(screenResolution(CGPoint.ccp( 100 , 40 ))) ;
+        shootButton.setPosition(screenResolution(CGPoint.ccp( screenWidth() -40 , 40 ))) ;
+
+        pauseButton.setPosition(screenResolution(CGPoint.ccp( 40  , screenHeight() - 30 ))) ;
     }
 
     @Override
     public void buttonClicked(Button sender) {
-        if(sender.equals(this.leftControl)){
-            Log.i("Button", "leftControl");
+
+        if (sender.equals(this.leftControl)) {
             this.delegate.moveLeft();
         }
 
-        if(sender.equals(this.rightControl)){
-            Log.i("Button", "rightControl");
+        if (sender.equals(this.rightControl)) {
             this.delegate.moveRight();
         }
 
-        /* Detecta o toque no botão de tiro e chama o disparo */
-        if(sender.equals(this.shootButton)){
-            Log.i("Button", "shootButton");
+        if (sender.equals(this.shootButton)) {
             this.delegate.shoot();
         }
+
+        if (sender.equals(this.pauseButton)) {
+            this.delegate.pauseGameAndShowLayer();
+        }
+
     }
 
     public void setDelegate(GameScene gameScene) {
@@ -79,10 +98,4 @@ public class GameButtons extends CCLayer implements ButtonDelegate {
 
     }
 
-    private void setButtonsPosition(){
-        // Posição dos botões
-        leftControl.setPosition(screenResolution(CGPoint.ccp(40, 40)));
-        rightControl.setPosition(screenResolution(CGPoint.ccp(100, 40)));
-        shootButton.setPosition(screenResolution(CGPoint.ccp(screenWidth() -40, 40)));
-    }
 }

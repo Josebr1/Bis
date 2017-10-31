@@ -13,6 +13,7 @@ import org.cocos2d.types.CGPoint;
 import java.util.Random;
 
 import br.com.casadocodigo.bis.R;
+import br.com.casadocodigo.bis.config.Runner;
 import br.com.casadocodigo.bis.game.interfaces.MeteorsEngineDelegate;
 
 import static br.com.casadocodigo.bis.config.DeviceSettings.screenHeight;
@@ -55,8 +56,12 @@ public class Meteor extends CCSprite {
      * @param dt
      */
     public void update(float dt){
-        y -= 1;
-        this.setPosition(screenResolution(CGPoint.ccp(x, y)));
+        // pause
+        if (Runner.check().isGamePlaying() &&
+                ! Runner.check().isGamePaused()) {
+            y -= 1;
+            this.setPosition(screenResolution(CGPoint.ccp(x, y)));
+        }
     }
 
     /**

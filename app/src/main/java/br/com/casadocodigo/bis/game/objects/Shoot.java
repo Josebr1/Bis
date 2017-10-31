@@ -14,6 +14,7 @@ import org.cocos2d.types.CGPoint;
 
 import br.com.casadocodigo.bis.R;
 import br.com.casadocodigo.bis.config.Assets;
+import br.com.casadocodigo.bis.config.Runner;
 import br.com.casadocodigo.bis.game.interfaces.ShootEngineDelegate;
 
 import static br.com.casadocodigo.bis.config.DeviceSettings.screenResolution;
@@ -47,8 +48,12 @@ public class Shoot extends CCSprite {
      * @param dt
      */
     public void update(float dt){
-        positionY += 2;
-        this.setPosition(screenResolution(CGPoint.ccp(positionX, positionY)));
+        if (Runner.check().isGamePlaying() &&
+                ! Runner.check().isGamePaused()) {
+            positionY += 2;
+            this.setPosition(screenResolution(
+                    CGPoint.ccp(positionX, positionY)));
+        }
     }
 
     public void setDelegate(ShootEngineDelegate delegate){

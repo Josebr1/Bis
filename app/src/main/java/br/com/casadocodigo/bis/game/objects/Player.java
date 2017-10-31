@@ -14,6 +14,7 @@ import org.cocos2d.types.CGPoint;
 
 import br.com.casadocodigo.bis.R;
 import br.com.casadocodigo.bis.config.Assets;
+import br.com.casadocodigo.bis.config.Runner;
 import br.com.casadocodigo.bis.game.calibrate.Accelerometer;
 import br.com.casadocodigo.bis.game.calibrate.AccelerometerDelegate;
 import br.com.casadocodigo.bis.game.interfaces.ShootEngineDelegate;
@@ -50,7 +51,10 @@ public class Player extends CCSprite implements AccelerometerDelegate {
      * nave e chama a engine de criação do tiro.
      */
     public void shoot() {
-        delegate.createShoot(new Shoot(positionX, positionY));
+        if (Runner.check().isGamePlaying() &&
+                ! Runner.check().isGamePaused()) {
+            delegate.createShoot(new Shoot(positionX, positionY));
+        }
     }
 
     public void setDelegate(ShootEngineDelegate delegate) {
@@ -58,17 +62,23 @@ public class Player extends CCSprite implements AccelerometerDelegate {
     }
 
     public void moveLeft() {
-        if (positionX > 30) {
-            positionX -= 10;
+        if (Runner.check().isGamePlaying() &&
+                ! Runner.check().isGamePaused()) {
+            if (positionX > 30) {
+                positionX -= 10;
+            }
+            setPosition(positionX, positionY);
         }
-        setPosition(positionX, positionY);
     }
 
     public void moveRight() {
-        if (positionX < screenWidth() - 30) {
-            positionX += 10;
+        if (Runner.check().isGamePlaying() &&
+                ! Runner.check().isGamePaused()) {
+            if (positionX < screenWidth() - 30) {
+                positionX += 10;
+            }
+            setPosition(positionX, positionY);
         }
-        setPosition(positionX, positionY);
     }
 
     public void explode() {
