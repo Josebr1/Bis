@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.hardware.SensorManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
@@ -16,7 +15,7 @@ import org.cocos2d.opengl.CCGLSurfaceView;
 import br.com.casadocodigo.bis.config.DeviceSettings;
 import br.com.casadocodigo.bis.game.scenes.TitleScreen;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,11 +26,6 @@ public class MainActivity extends AppCompatActivity {
         setRequestedOrientation(
                 ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         );
-/*        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
-        );*/
 
         // Configura a tela
         CCGLSurfaceView glSurfaceView = new CCGLSurfaceView(this);
